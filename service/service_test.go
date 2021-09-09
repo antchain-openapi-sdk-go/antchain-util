@@ -117,9 +117,9 @@ func Test_PutObject(t *testing.T) {
 func TestIsSuccess(t *testing.T) {
 	str := "OK"
 	str1 := "glang"
-	eq := IsSuccess(str, str1)
-	utils.AssertEqual(t, eq, true)
+	eq := IsSuccess(tea.String(str), tea.String(str1))
+	utils.AssertEqual(t, *eq, false)
 	str = "Glang"
-	eq1 := IsSuccess(str, str1)
-	utils.AssertEqual(t, eq1, true)
+	eq1 := IsSuccess(tea.String(str), tea.String(str1))
+	utils.AssertEqual(t, *eq1, true)
 }

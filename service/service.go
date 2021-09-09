@@ -192,6 +192,9 @@ func getUrlFormedMap(source map[string]string) (urlEncoded string) {
 	return
 }
 
-func IsSuccess(resultCode, successCode string) bool {
-	return strings.EqualFold(resultCode, "ok") || strings.EqualFold(resultCode, successCode)
+func IsSuccess(resultCode, successCode *string) *bool {
+	if tea.StringValue(successCode) == "ok" {
+		return tea.Bool(strings.EqualFold(tea.StringValue(resultCode), "ok"))
+	}
+	return tea.Bool(strings.EqualFold(tea.StringValue(resultCode), tea.StringValue(successCode)))
 }
