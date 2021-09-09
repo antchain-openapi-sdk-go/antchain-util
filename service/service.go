@@ -67,8 +67,8 @@ func HasError(raw *string, secret *string) *bool {
 	if tmp["sign"] == nil {
 		return tea.Bool(true)
 	}
-	s := strings.Index(res, "response")
-	end := strings.Index(res, "sign")
+	s := strings.Index(res, "\"response\"")
+	end := strings.Index(res, "\"sign\"")
 	res = res[s:end]
 	s = strings.Index(res, "{")
 	end = strings.LastIndex(res, "}")
@@ -99,6 +99,7 @@ func PutObject(item io.Reader, headers map[string]*string, urlPath *string) erro
 	if err != nil {
 		return errors.New("Upload file failed.")
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 && resp.StatusCode < 600 {
 		bodyStr, err := util.ReadAsString(resp.Body)
@@ -189,4 +190,8 @@ func getUrlFormedMap(source map[string]string) (urlEncoded string) {
 	}
 	urlEncoded = urlEncoder.Encode()
 	return
+}
+
+func IsSuccess(resultCode, successCode string) bool {
+	return strings.EqualFold(resultCode, "ok") || strings.EqualFold(resultCode, successCode)
 }

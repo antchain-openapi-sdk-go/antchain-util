@@ -46,6 +46,11 @@ func Test_HasError(t *testing.T) {
 	tmp = `{"response":{"expired_time":"2021-01-04T17:04:42.072+08:00","file_id":"kjiac1a298f8d","req_msg_id":"79e093b3ae0f3f2c1","result_code":"OK"},"sign":"IUl/4uLqtFnsjF1Zy6B6OWbCg="}`
 	res = HasError(tea.String(tmp), tea.String("secret"))
 	utils.AssertEqual(t, tea.BoolValue(res), true)
+
+	tmp = `{"response":{"signatureValue":"test","expired_time":"2021-01-04T17:04:42.072+08:00","file_id":"kjiac1a298f8d","req_msg_id":"79e093b3ae0f3f2c1","result_code":"OK"},"sign":"IUl/4uLqtFnsjF1Zy6B6OWbCg="}`
+	res = HasError(tea.String(tmp), tea.String("secret"))
+	utils.AssertEqual(t, tea.BoolValue(res), true)
+
 }
 
 func Test_GetNonce(t *testing.T) {
@@ -107,4 +112,14 @@ func Test_PutObject(t *testing.T) {
 
 	err = PutObject(nil, map[string]*string{"test": tea.String("ok")}, tea.String(ts2.URL))
 	utils.AssertNil(t, err)
+}
+
+func TestIsSuccess(t *testing.T) {
+	str := "OK"
+	str1 := "glang"
+	eq := IsSuccess(str, str1)
+	utils.AssertEqual(t, eq, true)
+	str = "Glang"
+	eq1 := IsSuccess(str, str1)
+	utils.AssertEqual(t, eq1, true)
 }
